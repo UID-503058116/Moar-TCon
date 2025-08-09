@@ -1,8 +1,15 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url = "https://maven.aliyun.com/repository/public" }
+        maven { url = "https://maven.aliyun.com/repository/gradle-plugin" }
+        maven { url = "http://mvnrepository.com/" }
         maven { url = "http://files.minecraftforge.net/maven" }
         maven { url = "https://repo.spongepowered.org/maven" }
+        maven { url = "https://maven.blamejared.com/" }
+        maven { url = "https://central.sonatype.com/" }
+        mavenLocal()
+        mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
@@ -72,7 +79,7 @@ repositories {
     }
     maven {
         name "Baubles"
-        url "http://maven.thiakil.com/"
+        url "http://mvnrepository.com/"
     }
     maven {
         name "Covers1624"
