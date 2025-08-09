@@ -9,53 +9,123 @@ import net.minecraft.world.World;
 
 public class ParticleIgniglomerateFlame extends ParticleFlame {
 
-	public ParticleIgniglomerateFlame(World worldIn, double x, double y, double z, int life) {
-		super(worldIn, x, y, z, 0, 0, 0);
-		if (life >= 0) {
-			this.particleMaxAge = life;
-		}
-		commonSetup();
-	}
+    public ParticleIgniglomerateFlame(World worldIn, double x, double y, double z, int life) {
+        super(worldIn, x, y, z, 0, 0, 0);
+        if (life >= 0) {
+            this.particleMaxAge = life;
+        }
+        commonSetup();
+    }
 
-	private void commonSetup() {
-		this.motionX = 0;
-		this.motionY = 0;
-		this.motionZ = 0;
-		this.canCollide = false;
-		this.particleGravity = 0;
-	}
+    private void commonSetup() {
+        this.motionX = 0;
+        this.motionY = 0;
+        this.motionZ = 0;
+        this.canCollide = false;
+        this.particleGravity = 0;
+    }
 
-	@Override
-	public void onUpdate() {
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
+    @Override
+    public void onUpdate() {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
 
-		BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
-		
-		IBlockState state = Blocks.AIR.getDefaultState();
-		if (world.isBlockLoaded(pos)) {
-			state = this.world.getBlockState(pos);
-		}
+        BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
+        
+        IBlockState state = Blocks.AIR.getDefaultState();
+        if (world.isBlockLoaded(pos)) {
+            state = this.world.getBlockState(pos);
+        }
 
-		boolean flag = state.getMaterial() == Material.LAVA;
-		boolean flag2 = !flag && state.getMaterial().blocksMovement();
+        boolean flag = state.getMaterial() == Material.LAVA;
+        boolean flag2 = !flag && state.getMaterial().blocksMovement();
 
-		if (this.particleAge++ >= this.particleMaxAge || flag2) {
-			this.setExpired();
-		}
+        if (this.particleAge++ >= this.particleMaxAge || flag2) {
+            this.setExpired();
+        }
 
-		if (!flag) {
-			this.particleAge += 119;
-		}
+        if (!flag) {
+            this.particleAge += 119;
+        }
 
-		this.move(this.motionX, this.motionY, this.motionZ);
-	}
+        this.move(this.motionX, this.motionY, this.motionZ);
+    }
 
-	public void addMotion(double x, double y, double z) {
-		this.motionX += x;
-		this.motionY += y;
-		this.motionZ += z;
-	}
+    public void addMotion(double x, double y, double z) {
+        this.motionX += x;
+        this.motionY += y;
+        this.motionZ += z;
+    }
+
+    // 新增方法：固定返回最大亮度，避免因 world.getCombinedLight 获取数据时出现空指针异常
+    @Override
+    public int getBrightnessForRender(float partialTick) {
+        return 15728880; // 0xF000F0
+    }
+}
+
+/*
+原始代码:
+package com.existingeevee.moretcon.client.particle;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleFlame;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+public class ParticleIgniglomerateFlame extends ParticleFlame {
+
+    public ParticleIgniglomerateFlame(World worldIn, double x, double y, double z, int life) {
+        super(worldIn, x, y, z, 0, 0, 0);
+        if (life >= 0) {
+            this.particleMaxAge = life;
+        }
+        commonSetup();
+    }
+
+    private void commonSetup() {
+        this.motionX = 0;
+        this.motionY = 0;
+        this.motionZ = 0;
+        this.canCollide = false;
+        this.particleGravity = 0;
+    }
+
+    @Override
+    public void onUpdate() {
+        this.prevPosX = this.posX;
+        this.prevPosY = this.posY;
+        this.prevPosZ = this.posZ;
+
+        BlockPos pos = new BlockPos(this.posX, this.posY, this.posZ);
+        
+        IBlockState state = Blocks.AIR.getDefaultState();
+        if (world.isBlockLoaded(pos)) {
+            state = this.world.getBlockState(pos);
+        }
+
+        boolean flag = state.getMaterial() == Material.LAVA;
+        boolean flag2 = !flag && state.getMaterial().blocksMovement();
+
+        if (this.particleAge++ >= this.particleMaxAge || flag2) {
+            this.setExpired();
+        }
+
+        if (!flag) {
+            this.particleAge += 119;
+        }
+
+        this.move(this.motionX, this.motionY, this.motionZ);
+    }
+
+    public void addMotion(double x, double y, double z) {
+        this.motionX += x;
+        this.motionY += y;
+        this.motionZ += z;
+    }
 
 }
+*/
